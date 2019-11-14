@@ -32,6 +32,7 @@ class Map extends React.Component {
       unit: "metric",
       placeholderOrigin: 'Välj startplats',
       placeholderDestination: 'Välj ankomstplats',
+      language: "sv",
 
       controls: {
         profileSwitcher: false,
