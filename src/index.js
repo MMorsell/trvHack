@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW1vcnNlbGwiLCJhIjoiY2syeGZwOXFhMG55eTNjbHFpYjVrbngyMCJ9.eg9D5CWK4Ovb1lYVbGcg3A";
@@ -41,6 +42,20 @@ class Application extends React.Component {
       zoom: this.state.zoom
     });
 
+    var directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+      unit: "metric",
+      placeholderOrigin: 'Välj startplats',
+      placeholderDestination: 'Välj ankomstplats',
+
+      controls: {
+        profileSwitcher: false,
+        inputs: true,
+        instructions: true
+      },
+    });
+
+    map.addControl(directions, "top-left");
     // let bounds = [[17.5695, 61.5578], [17.5695, 61.5578]];
     // map.setMaxBounds(bounds);
     let canvas = map.getCanvasContainer();
