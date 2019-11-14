@@ -10,30 +10,15 @@ class Application extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: 17.5695 ,
-      lat: 61.5578,
-      zoom: 4
+      lng: 15.6360,
+      lat: 60.5053,
+      zoom: 9
     };
   }
 
 
   componentDidMount() {
-    let startingLongitude;
-    let startingLatitude;
-
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      } else { 
-        console.log("Geolocation is not supported by this browser.");
-      }
-    }
     
-    function showPosition(position) {
-      startingLongitude = position.coords.latitude;
-      startingLatitude = position.coords.longitude;
-      debugger;
-    }
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -59,14 +44,11 @@ class Application extends React.Component {
     // let bounds = [[17.5695, 61.5578], [17.5695, 61.5578]];
     // map.setMaxBounds(bounds);
     let canvas = map.getCanvasContainer();
-    let start = [15.662323, 60.523751];
+    let start = [15.6254, 60.5519];
 
     function getRoute(end) {
-      // getLocation();
-      // debugger;
-      // let start = [startingLatitude, startingLongitude];
-      let start = [15.662323, 60.523751];
-      let url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
+      let start = [15.6254, 60.5519];
+      let url = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
     
       // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
       let req = new XMLHttpRequest();
