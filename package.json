@@ -4,6 +4,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-directions": "^4.0.2",
     "@mapbox/polyline": "^1.1.0",
+    "@turf/turf": "^5.1.6",
     "mapbox-gl": "^1.5.0",
     "mapbox-gl-directions": "^3.0.3",
     "mapbox-gl-geocoder": "^2.0.1",
@@ -11,7 +12,8 @@
     "react-dom": "^16.11.0",
     "react-route": "^1.0.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.2.0"
+    "react-scripts": "^3.2.0",
+    "turf": "^3.0.14"
   },
   "scripts": {
     "start": "react-scripts start"
