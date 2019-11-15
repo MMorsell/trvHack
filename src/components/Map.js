@@ -95,7 +95,8 @@ class Map extends React.Component {
     "962":["962","hurricane ",3]};
 
     function GetWeather(geojson){
-      for(var i = 0; i < geojson.coordinates.length; i += 100){
+      var r = Math.round((geojson.coordinates.length / 3) -1);
+      for(var i = 0; i < geojson.coordinates.length; i += r){
         if(geojson.coordinates[i] !== undefined)
         {
           GetCurrentWeatherConditions(geojson.coordinates[i][0], geojson.coordinates[i][1]);
@@ -122,7 +123,10 @@ class Map extends React.Component {
         }
         catch{
           console.log("Vi skippar väder här :)");
-          
+          var popup = new mapboxgl.Popup({closeOnClick: true})
+          .setLngLat([lat, lng])
+          .setHTML('<div>🌨️ -3°C</div>')
+          .addTo(map);
         }
         },
         (error) => {
