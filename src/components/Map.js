@@ -109,7 +109,7 @@ class Map extends React.Component {
       requestAnimationFrame(animateMarker);
       }*/
 
-    function GetPlowsOnRoute(geoJSON) {
+    function GetPlowsOnRoute(map, geoJSON) {
       var xhr = new XMLHttpRequest();
 
       xhr.addEventListener('load', () => {
@@ -136,16 +136,66 @@ class Map extends React.Component {
         "speedInKmh": 68
         };
 
-      AnimatePlowAlongRoute(obj);
+      AnimatePlowAlongRoute(map, obj);
     }
+    
+ 
+      function animateMarker(geoJSON) {
 
-    function AnimatePlowAlongRoute(route) {
-      console.log(plowLocation);
+        setTimeout(() => {
+          
+          if(geoJSON !== undefined && PLOWCOUNTER < geoJSON.length)
+          {
+            var i = PLOWCOUNTER;
+            // Update the data to a new position based on the animation timestamp. The
+            // divisor in the expression `timestamp / 1000` controls the animation speed.
+            
+            marker.setLngLat(geoJSON[i]);
+            
+            ++PLOWCOUNTER;
+            // Ensure it's added to the map. This is safe to call if it's already added.
+            marker.addTo(map);
+            
+            // Request the next frame of the animation.
+            requestAnimationFrame(function (){animateMarker(geoJSON)});
+            
+          }
+          else{
+            PLOWCOUNTER = 0;
+            requestAnimationFrame(function (){animateMarker(geoJSON)});
+          }
+        }, 3000);
+      }
+ 
 
+
+    function AnimatePlowAlongRoute(map, obj) {
       // TODO. Plot the plow here
       // https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
       // Calculate number of steps depending on speed
 
+      console.log(obj);
+      // Start the animation.
+      
+      requestAnimationFrame(function (){animateMarker(obj.coordinates)});
+
+      
+      /*var origin = [obj.origin];
+      var destination = [obj.destination];
+
+      var route = {
+          "type": "FeatureCollection",
+          "features": [{
+          "type": "Feature",
+          "geometry": {
+          "type": "LineString",
+          "coordinates": [
+          origin,
+          destination
+          ]
+          }
+        }]
+      };
       var point = {
           "type": "FeatureCollection",
           "features": [{
@@ -158,47 +208,48 @@ class Map extends React.Component {
         }]
       };
       // Calculate the distance in kilometers between route start/end point.
-      var lineDistance = turf.lineDistance(route.features[0], 'kilometers');
+      console.log(route.features[0]);
       var steps = 500;
+      map.addSource('point', {
+        "type": "geojson",
+        "data": point
+        });
+        map.addLayer({
+          "id": "point",
+          "type": "circle",
+          "source": "point",
+          "paint": {
+          "circle-radius": 1000,
+          "circle-color": "#3887be"
+          }
+          });*/
+        /*map.addLayer({
+          "id": "point",
+          "source": "point",
+          "type": "symbol",
+          "layout": {
+          "icon-image": "airport-15",
+          "icon-rotate": ["get", "bearing"],
+          "icon-rotation-alignment": "map",
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true
+          }
+          });*/
+
+      //animate(obj, point, route, 0, 1);
     }
 
-    function animate() {
-        // Update point geometry to a new position based on counter denoting
-        // the index to access the arc.
-        point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
-        
-        // Calculate the bearing to ensure the icon is rotated to match the route arc
-        // The bearing is calculate between the current point and the next point, except
-        // at the end of the arc use the previous point and the current point
-        point.features[0].properties.bearing = turf.bearing(
-        turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
-        turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter : counter + 1])
-        );
-        
-        // Update the source with this new data.
-        map.getSource('point').setData(point);
-        
-        // Request the next frame of animation so long the end has not been reached.
-        if (counter < steps) {
-        requestAnimationFrame(animate);
-        }
-        
-        counter = counter + 1;
-        }
-        
-        document.getElementById('replay').addEventListener('click', function() {
-        // Set the coordinates of the original point back to origin
-        point.features[0].geometry.coordinates = origin;
-        
-        // Update the source layer
-        map.getSource('point').setData(point);
-        
-        // Reset the counter
-        counter = 0;
-        
-        // Restart the animation.
-        animate(counter);
-      });
+    function animate(obj, point, route, counter, steps) {
+
+      point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
+      map.getSource('point').setData(point);
+
+      if (counter < steps) {
+        counter++;
+        requestAnimationFrame(function(){animate(obj, point, route, counter, steps)});
+      }
+
+    }
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -206,6 +257,9 @@ class Map extends React.Component {
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom
     });
+
+    const marker = new mapboxgl.Marker();
+    var PLOWCOUNTER = 0;
 
     var directions = new MapboxDirections({
       styles: Style,
@@ -270,7 +324,7 @@ class Map extends React.Component {
         const geoJSON = Polyline.toGeoJSON(route.geometry);
         
         GetWeather(geoJSON);
-        GetPlowsOnRoute(geoJSON);
+        GetPlowsOnRoute(map, geoJSON);
         //PlowDragon(geoJSON);
       }
     });
