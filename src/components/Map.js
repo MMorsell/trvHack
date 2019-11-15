@@ -121,7 +121,8 @@ class Map extends React.Component {
           .addTo(map);
         }
         catch{
-          Console.log("Vi skippar väder här :)");
+          console.log("Vi skippar väder här :)");
+          
         }
         },
         (error) => {
