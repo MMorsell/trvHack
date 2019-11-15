@@ -106,9 +106,14 @@ class Map extends React.Component {
 
     function GetCurrentWeatherConditions(lat, lng){
       console.log(lat, lng);
-      var baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=ad6c112c3abc72584d46eee71285a4aa";
 
-      fetch(baseUrl)
+      var popup = new mapboxgl.Popup({closeOnClick: true})
+          .setLngLat([lat, lng])
+          .setHTML('<div>🌨️ -3°C</div>')
+          .addTo(map);
+     // var baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=ad6c112c3abc72584d46eee71285a4aa";
+
+      /*fetch(baseUrl)
       .then(res => res.json())
       .then(
         (result) => {
@@ -123,16 +128,13 @@ class Map extends React.Component {
         }
         catch{
           console.log("Vi skippar väder här :)");
-          var popup = new mapboxgl.Popup({closeOnClick: true})
-          .setLngLat([lat, lng])
-          .setHTML('<div>🌨️ -3°C</div>')
-          .addTo(map);
+          
         }
         },
         (error) => {
           console.log(error);
         }
-      )
+      )*/
     }
 
     function GetPlowsOnRoute(geoJSON) {
