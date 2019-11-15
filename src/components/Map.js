@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import Polyline from "@mapbox/polyline";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW1vcnNlbGwiLCJhIjoiY2syeGZwOXFhMG55eTNjbHFpYjVrbngyMCJ9.eg9D5CWK4Ovb1lYVbGcg3A";
@@ -52,6 +53,17 @@ class Map extends React.Component {
       )
     }
 
+    function GetPlowsOnRoute(geoJSON) {
+      var xhr = new XMLHttpRequest();
+
+      xhr.addEventListener('load', () => {
+        console.log(xhr.responseText);
+      });
+      // TODO: Will update to a public route later...
+      xhr.open('POST', 'https://localhost:5001/plowlocation');
+      xhr.send(geoJSON);
+    }
+
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mmorsell/ck2xg0hf21ow41dtdntnyp410",
@@ -86,6 +98,15 @@ class Map extends React.Component {
         lat: map.getCenter().lat.toFixed(4),
         zoom: map.getZoom().toFixed(2)
       });
+    });
+
+    directions.on("route", (data) => {
+      if (data.route.length >= 0) {
+        const route = data.route[0];
+        const geoJSON = Polyline.toGeoJSON(route.geometry);
+        
+        GetPlowsOnRoute(geoJSON);
+      }
     });
 
   }
