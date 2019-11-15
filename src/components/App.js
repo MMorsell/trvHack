@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="container-fluid">
       <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <Switch>
         <Route path="/" exact component={Map} />
         <Route path="/about" component={AboutPage} />

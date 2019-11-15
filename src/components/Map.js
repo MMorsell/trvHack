@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import Polyline from "@mapbox/polyline";
+import { tsNumberKeyword } from "@babel/types";
+import Style from "./common/Style"
+import trafficLayers from "./trafficLayers"
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW1vcnNlbGwiLCJhIjoiY2syeGZwOXFhMG55eTNjbHFpYjVrbngyMCJ9.eg9D5CWK4Ovb1lYVbGcg3A";
@@ -199,12 +202,14 @@ class Map extends React.Component {
     });
 
     var directions = new MapboxDirections({
+      styles: Style,
       accessToken: mapboxgl.accessToken,
       unit: "metric",
       placeholderOrigin: 'Välj startplats',
       placeholderDestination: 'Välj ankomstplats',
       language: "sv",
-      alternatives: true,
+      congestion:true,
+      alternatives:true,
 
       controls: {
         profileSwitcher: false,
@@ -227,6 +232,26 @@ class Map extends React.Component {
         zoom: map.getZoom().toFixed(2)
       });
     });
+
+    map.on('load', function(){
+
+        map.addSource('trafficSource', {
+            type: 'vector',
+            url: 'mapbox://mapbox.mapbox-traffic-v1'
+        });
+    
+        addTraffic();
+    });
+
+    function addTraffic(){
+        var firstPOILabel = map.getStyle().layers.filter(function(obj){ 
+            return obj["source-layer"] == "poi_label";
+        });
+    
+        for(var i = 0; i < trafficLayers.length; i++) {
+            map.addLayer(trafficLayers[i], firstPOILabel[0].id);
+        }
+    }
 
     directions.on("route", (data) => {
       if (data.route.length >= 0) {
