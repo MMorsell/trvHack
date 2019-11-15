@@ -202,7 +202,12 @@ class Map extends React.Component {
         });
     
         for(var i = 0; i < trafficLayers.length; i++) {
-            map.addLayer(trafficLayers[i], firstPOILabel[0].id);
+            // console.log(trafficLayers[i]);
+            // console.log(firstPOILabel[0].id);
+            let layer = trafficLayers[i];
+            // layer.paint["line-color"] = "hsl(45, 90%, 50%)"
+            // layer.paint.line-color = "hsl(100, 70%, 45%)";
+            map.addLayer(layer, firstPOILabel[0].id);
         }
     }
     // function addIcons() {
