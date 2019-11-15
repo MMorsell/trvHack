@@ -144,11 +144,35 @@ class Map extends React.Component {
       var xhr = new XMLHttpRequest();
 
       xhr.addEventListener('load', () => {
-        console.log(xhr.responseText);
+        AnimatePlowAlongRoute(xhr.responseText);
       });
+
+      xhr.addEventListener('error', () => {
+        console.log("error event");
+        MockBackend();
+      });
+
       // TODO: Will update to a public route later...
       xhr.open('POST', 'https://localhost:5001/plowlocation');
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(geoJSON);
+    }
+
+    function MockBackend() {
+      var obj = {
+        "id": "e00c0317-300d-4ded-b159-06c1983a3c3e",
+        "longitude": "60.525398",
+        "latitude": "15.552741",
+        "speedInKmh": 68
+        };
+
+      AnimatePlowAlongRoute(obj);
+    }
+
+    function AnimatePlowAlongRoute(plowLocation) {
+      console.log(plowLocation);
+
+      // TODO. Plot the plow here
     }
 
     const map = new mapboxgl.Map({
