@@ -218,11 +218,13 @@ class Map extends React.Component {
 
     directions.on("route", (data) => {
       if (data.route.length >= 0) {
-        const route = data.route[0];
-        const geoJSON = Polyline.toGeoJSON(route.geometry);
+        for(var i = 0; i < data.route.length; i++) {
+            const route = data.route[i];
+            const geoJSON = Polyline.toGeoJSON(route.geometry);
         
         GetWeather(geoJSON);
         GetPlowsOnRoute(geoJSON);
+        }
         //PlowDragon(geoJSON);
       }
     });
