@@ -16,3 +16,8 @@
   z-index: 2 !important;
   font-weight: bold;
 }
+
+.mapboxgl-popup {
+  max-width: 400px;
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  }

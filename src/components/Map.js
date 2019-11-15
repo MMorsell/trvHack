@@ -5,7 +5,7 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import Polyline from "@mapbox/polyline";
 import { tsNumberKeyword } from "@babel/types";
 import Style from "./common/Style"
-import trafficLayers from "./trafficLayers"
+import trafficLayers from "./common/trafficLayers"
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW1vcnNlbGwiLCJhIjoiY2syeGZwOXFhMG55eTNjbHFpYjVrbngyMCJ9.eg9D5CWK4Ovb1lYVbGcg3A";
@@ -198,6 +198,7 @@ class Map extends React.Component {
         });
     
         addTraffic();
+        // addIcons();
     });
 
     function addTraffic(){
@@ -209,6 +210,10 @@ class Map extends React.Component {
             map.addLayer(trafficLayers[i], firstPOILabel[0].id);
         }
     }
+    // function addIcons() {
+        
+    //     map.addLayer(SnowPlowIcons);
+    // }
 
     directions.on("route", (data) => {
       if (data.route.length >= 0) {
@@ -218,6 +223,35 @@ class Map extends React.Component {
         GetWeather(geoJSON);
         GetPlowsOnRoute(geoJSON);
       }
+    });
+
+    // When a click event occurs on a feature in the places layer, open a popup at the
+// location of the feature, with description HTML from its properties.
+map.on('click', 'places', function (e) {
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var description = e.features[0].properties.description;
+     
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+     
+    new mapboxgl.Popup()
+    .setLngLat(coordinates)
+    .setHTML(description)
+    .addTo(map);
+    });
+     
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'places', function () {
+    map.getCanvas().style.cursor = 'pointer';
+    });
+     
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'places', function () {
+    map.getCanvas().style.cursor = '';
     });
 
   }

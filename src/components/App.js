@@ -13,7 +13,6 @@ function App() {
       <Switch>
         <Route path="/" exact component={Map} />
         <Route path="/about" component={AboutPage} />
-        {/* <Redirect from="/hihi" to="/about" /> */}
         <Route component={NotFoundPage} />
       </Switch>
       </BrowserRouter>
