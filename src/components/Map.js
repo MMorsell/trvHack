@@ -95,21 +95,42 @@ class Map extends React.Component {
     "962":["962","hurricane ",3]};
 
     function GetWeather(geojson){
-      var r = Math.round((geojson.coordinates.length / 3) -1);
-      for(var i = 0; i < geojson.coordinates.length; i += r){
-        if(geojson.coordinates[i] !== undefined)
-        {
-          GetCurrentWeatherConditions(geojson.coordinates[i][0], geojson.coordinates[i][1]);
+      if(geojson.coordinates.length > 30){
+        var r = Math.round((geojson.coordinates.length / 2) -1);
+        for(var i = 0; i < geojson.coordinates.length; i += r){
+          if(geojson.coordinates[i] !== undefined)
+          {
+            GetCurrentWeatherConditions(geojson.coordinates[i][0], geojson.coordinates[i][1]);
+          }
         }
+      }
+      else{
+        GetCurrentWeatherConditions(geojson.coordinates[0][0], geojson.coordinates[0][1]);
+      }
+    }
+
+    function GetRandomWeather(){
+      let r = Math.random();   
+      let d = new Date(+(new Date()) - Math.floor(Math.random()*10000000)).toLocaleTimeString()
+
+      if(r >= 0 && r < 0.3) {
+        return '<div>🌨️ -3°C</div><span>Senast plogat: ' + d + '</span>';
+      }
+      else if(r >= 0.3 && r < 0.6 ){
+        return '<div>🌨️ -5°C</div><span>Senast plogat: ' + d + '</span>';
+      }
+      else{
+        return '<div>☀️ -7°C</div><br><span>Senast plogat: ' + d + '</span>';
       }
     }
 
     function GetCurrentWeatherConditions(lat, lng){
       console.log(lat, lng);
 
+      let w = GetRandomWeather();
       var popup = new mapboxgl.Popup({closeOnClick: true})
           .setLngLat([lat, lng])
-          .setHTML('<div>🌨️ -3°C</div>')
+          .setHTML(w)
           .addTo(map);
      // var baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=ad6c112c3abc72584d46eee71285a4aa";
 
@@ -136,6 +157,28 @@ class Map extends React.Component {
         }
       )*/
     }
+
+    function PlowDragon(geoJSON){
+        //var marker = new mapboxgl.Marker();
+        //equestAnimationFrame(animateMarker);
+    }
+
+    /*function animateMarker(timestamp) {
+      var radius = 20;
+       
+      // Update the data to a new position based on the animation timestamp. The
+      // divisor in the expression `timestamp / 1000` controls the animation speed.
+      marker.setLngLat([
+      Math.cos(timestamp / 1000) * radius,
+      Math.sin(timestamp / 1000) * radius
+      ]);
+       
+      // Ensure it's added to the map. This is safe to call if it's already added.
+      marker.addTo(map);
+       
+      // Request the next frame of the animation.
+      requestAnimationFrame(animateMarker);
+      }*/
 
     function GetPlowsOnRoute(geoJSON) {
       var xhr = new XMLHttpRequest();
@@ -192,6 +235,7 @@ class Map extends React.Component {
         
         GetWeather(geoJSON);
         GetPlowsOnRoute(geoJSON);
+        //PlowDragon(geoJSON);
       }
     });
 
