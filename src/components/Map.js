@@ -310,7 +310,12 @@ class Map extends React.Component {
         });
     
         for(var i = 0; i < trafficLayers.length; i++) {
-            map.addLayer(trafficLayers[i], firstPOILabel[0].id);
+            // console.log(trafficLayers[i]);
+            // console.log(firstPOILabel[0].id);
+            let layer = trafficLayers[i];
+            // layer.paint["line-color"] = "hsl(45, 90%, 50%)"
+            // layer.paint.line-color = "hsl(100, 70%, 45%)";
+            map.addLayer(layer, firstPOILabel[0].id);
         }
     }
     // function addIcons() {
@@ -320,11 +325,17 @@ class Map extends React.Component {
 
     directions.on("route", (data) => {
       if (data.route.length >= 0) {
-        const route = data.route[0];
-        const geoJSON = Polyline.toGeoJSON(route.geometry);
+        for(var i = 0; i < data.route.length; i++) {
+            const route = data.route[i];
+            const geoJSON = Polyline.toGeoJSON(route.geometry);
         
         GetWeather(geoJSON);
+<<<<<<< HEAD
         GetPlowsOnRoute(map, geoJSON);
+=======
+        GetPlowsOnRoute(geoJSON);
+        }
+>>>>>>> a2bc75acd596e8690d5e75fae3530f1c5b3bfd0a
         //PlowDragon(geoJSON);
       }
     });
