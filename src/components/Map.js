@@ -327,9 +327,11 @@ class Map extends React.Component {
             const route = data.route[i];
             const geoJSON = Polyline.toGeoJSON(route.geometry);
         
-        GetWeather(geoJSON);
-        GetPlowsOnRoute(map, geoJSON);
-        //PlowDragon(geoJSON);
+            if (i == 1) {
+              GetPlowsOnRoute(map, geoJSON);
+            }
+            
+            GetWeather(geoJSON);
       }}
     });
 
