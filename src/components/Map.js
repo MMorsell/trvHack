@@ -65,6 +65,7 @@ class Map extends React.Component {
       placeholderOrigin: 'Välj startplats',
       placeholderDestination: 'Välj ankomstplats',
       language: "sv",
+      alternatives: true,
 
       controls: {
         profileSwitcher: false,
