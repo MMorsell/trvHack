@@ -138,13 +138,66 @@ class Map extends React.Component {
       AnimatePlowAlongRoute(obj);
     }
 
-    function AnimatePlowAlongRoute(plowLocation) {
+    function AnimatePlowAlongRoute(route) {
       console.log(plowLocation);
 
       // TODO. Plot the plow here
       // https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
       // Calculate number of steps depending on speed
+
+      var point = {
+          "type": "FeatureCollection",
+          "features": [{
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+          "type": "Point",
+          "coordinates": origin
+          }
+        }]
+      };
+      // Calculate the distance in kilometers between route start/end point.
+      var lineDistance = turf.lineDistance(route.features[0], 'kilometers');
+      var steps = 500;
     }
+
+    function animate() {
+        // Update point geometry to a new position based on counter denoting
+        // the index to access the arc.
+        point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
+        
+        // Calculate the bearing to ensure the icon is rotated to match the route arc
+        // The bearing is calculate between the current point and the next point, except
+        // at the end of the arc use the previous point and the current point
+        point.features[0].properties.bearing = turf.bearing(
+        turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
+        turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter : counter + 1])
+        );
+        
+        // Update the source with this new data.
+        map.getSource('point').setData(point);
+        
+        // Request the next frame of animation so long the end has not been reached.
+        if (counter < steps) {
+        requestAnimationFrame(animate);
+        }
+        
+        counter = counter + 1;
+        }
+        
+        document.getElementById('replay').addEventListener('click', function() {
+        // Set the coordinates of the original point back to origin
+        point.features[0].geometry.coordinates = origin;
+        
+        // Update the source layer
+        map.getSource('point').setData(point);
+        
+        // Reset the counter
+        counter = 0;
+        
+        // Restart the animation.
+        animate(counter);
+      });
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
