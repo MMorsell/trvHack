@@ -173,6 +173,8 @@ class Map extends React.Component {
       console.log(plowLocation);
 
       // TODO. Plot the plow here
+      // https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
+      // Calculate number of steps depending on speed
     }
 
     const map = new mapboxgl.Map({
