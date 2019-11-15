@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import Polyline from "@mapbox/polyline";
+import { tsNumberKeyword } from "@babel/types";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW1vcnNlbGwiLCJhIjoiY2syeGZwOXFhMG55eTNjbHFpYjVrbngyMCJ9.eg9D5CWK4Ovb1lYVbGcg3A";
@@ -77,6 +78,8 @@ class Map extends React.Component {
       placeholderOrigin: 'Välj startplats',
       placeholderDestination: 'Välj ankomstplats',
       language: "sv",
+      congestion:true,
+      alternatives:true,
 
       controls: {
         profileSwitcher: false,
