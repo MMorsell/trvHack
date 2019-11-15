@@ -113,7 +113,7 @@ class Map extends React.Component {
       var xhr = new XMLHttpRequest();
 
       xhr.addEventListener('load', () => {
-        AnimatePlowAlongRoute(xhr.responseText);
+        AnimatePlowAlongRoute("", JSON.parse(xhr.responseText));
       });
 
       xhr.addEventListener('error', () => {
@@ -143,7 +143,6 @@ class Map extends React.Component {
       function animateMarker(geoJSON) {
 
         setTimeout(() => {
-          
           if(geoJSON !== undefined && PLOWCOUNTER < geoJSON.length)
           {
             var i = PLOWCOUNTER;
@@ -176,7 +175,6 @@ class Map extends React.Component {
 
       console.log(obj);
       // Start the animation.
-      
       requestAnimationFrame(function (){animateMarker(obj.coordinates)});
 
       
@@ -330,14 +328,9 @@ class Map extends React.Component {
             const geoJSON = Polyline.toGeoJSON(route.geometry);
         
         GetWeather(geoJSON);
-<<<<<<< HEAD
         GetPlowsOnRoute(map, geoJSON);
-=======
-        GetPlowsOnRoute(geoJSON);
-        }
->>>>>>> a2bc75acd596e8690d5e75fae3530f1c5b3bfd0a
         //PlowDragon(geoJSON);
-      }
+      }}
     });
 
     // When a click event occurs on a feature in the places layer, open a popup at the
