@@ -163,7 +163,7 @@ class Map extends React.Component {
             PLOWCOUNTER = 0;
             requestAnimationFrame(function (){animateMarker(geoJSON)});
           }
-        }, 3000);
+        }, 1000);
       }
  
 
@@ -330,7 +330,7 @@ class Map extends React.Component {
             if (i == 1) {
               GetPlowsOnRoute(map, geoJSON);
             }
-            
+
             GetWeather(geoJSON);
       }}
     });
